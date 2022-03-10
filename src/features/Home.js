@@ -3,9 +3,11 @@ import React from 'react';
 import {Avatar, IconButton} from 'react-native-paper';
 
 import bg from '../assets/15.png';
+import Travel from '../components/HomeSection/Travel';
+import HomeSectionSelector from '../components/HomeSection/HomeSectionSelector';
+import HomeCarousel from '../components/HomeSection/HomeCarousel';
 
 const Home = () => {
-  console.log('dasds');
   return (
     <View style={styles.home}>
       <ImageBackground source={bg} resizeMode="cover" style={styles.image}>
@@ -31,7 +33,13 @@ const Home = () => {
           </View>
         </View>
         <Text style={styles.heading}>Where's your next destination</Text>
+        <Travel />
       </ImageBackground>
+      <View style={styles.lowerSection}>
+        <Text style={styles.deals}>DEALS</Text>
+        <HomeSectionSelector />
+        <HomeCarousel />
+      </View>
     </View>
   );
 };
@@ -62,5 +70,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 35,
     marginLeft: 15,
+    fontWeight: '500',
+  },
+  lowerSection: {
+    flex: 0.5,
+  },
+  deals: {
+    fontWeight: '700',
+    marginTop: 25,
+    fontSize: 18,
+    color: 'black',
+    marginLeft: 10,
   },
 });

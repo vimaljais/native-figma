@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -38,8 +38,8 @@ const App = () => {
           headerShown: false,
         })}>
         <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Guide" component={Guide} />
         <Tab.Screen name="Search" component={Search} />
+        <Tab.Screen name="Guide" component={Guide} />
         <Tab.Screen name="Trips" component={Trip} />
       </Tab.Navigator>
     </NavigationContainer>
