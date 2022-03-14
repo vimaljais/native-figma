@@ -1,29 +1,11 @@
 import {FlatList, ImageBackground, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button, Card, IconButton} from 'react-native-paper';
-
-import img1 from '../../assets/8.jpeg';
-import img2 from '../../assets/7.jpeg';
-
-const LIST = [
-  {
-    id: 1,
-    name: 'Marina Bay',
-    subText: 'Singarpore',
-    img: img1,
-  },
-  {
-    id: 2,
-    name: 'Petronas Twin Towers',
-    subText: 'Singarpore',
-    img: img2,
-  },
-];
 
 const Item = ({name, img, subText}) => (
   <Card style={styles.cardList}>
     <ImageBackground
-      source={img}
+      source={{uri: img}}
       resizeMode="cover"
       imageStyle={styles.img}
       style={styles.imgContainer}>
@@ -52,17 +34,25 @@ const Item = ({name, img, subText}) => (
   </Card>
 );
 
-const Attractions = () => {
+const Attractions = ({ImgList, query}) => {
+  useEffect(() => {
+    console.log(ImgList);
+  }, [ImgList]);
+
   const renderItem = ({item}) => (
-    <Item name={item.name} subText={item.subText} img={item.img} />
+    <Item name={item.user.first_name} subText={query} img={item.urls.regular} />
   );
   return (
     <View style={styles.container}>
-      <FlatList
-        data={LIST}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
+      {ImgList.length > 0 ? (
+        <FlatList
+          data={ImgList}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+      ) : (
+        <Text>Enter a Query</Text>
+      )}
     </View>
   );
 };

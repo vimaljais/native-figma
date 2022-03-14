@@ -36,6 +36,19 @@ const App = () => {
           tabBarActiveBackgroundColor: '#FF4760',
           tabBarShowLabel: false,
           headerShown: false,
+          tabBarStyle: {
+            position: 'absolute',
+            height: 50,
+            marginBottom: 20,
+            marginLeft: 20,
+            marginRight: 20,
+            borderRadius: 30,
+            borderTopLeftRadius: 30,
+          },
+          tabBarItemStyle: {
+            margin: 5,
+            borderRadius: 30,
+          },
         })}>
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Search" component={Search} />

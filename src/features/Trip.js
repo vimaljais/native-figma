@@ -7,7 +7,7 @@ import Covid from '../components/TripSection/Covid';
 const Trip = () => {
   return (
     <View>
-      <Text style={styles.heading}>Trip Plan</Text>
+      <Text style={styles.heading}>Trip Plan!</Text>
       <Selector />
       <Attractions />
       <Covid />

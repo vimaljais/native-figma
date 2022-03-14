@@ -4,7 +4,7 @@ import {Avatar, IconButton} from 'react-native-paper';
 
 import bg from '../assets/15.png';
 import Travel from '../components/HomeSection/Travel';
-import HomeSectionSelector from '../components/HomeSection/HomeSectionSelector';
+// import HomeSectionSelector from '../components/HomeSection/HomeSectionSelector';
 import HomeCarousel from '../components/HomeSection/HomeCarousel';
 
 const Home = () => {
@@ -37,7 +37,7 @@ const Home = () => {
       </ImageBackground>
       <View style={styles.lowerSection}>
         <Text style={styles.deals}>DEALS</Text>
-        <HomeSectionSelector />
+        {/* <HomeSectionSelector /> */}
         <HomeCarousel />
       </View>
     </View>

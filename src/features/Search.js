@@ -1,21 +1,40 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import SearchBar from '../components/SearchSection/SearchBar';
 import Destinations from '../components/SearchSection/Destinations';
 import Attractions from '../components/SearchSection/Attractions';
+import {api} from '../utils/api';
 
 const Search = ({placeholder = 'Search'}) => {
+  const [query, setQuery] = useState('Maldives');
+  const [ImgList, setImgList] = useState([]);
+
+  useEffect(() => {
+    console.log(query);
+    fetch(
+      `https://api.unsplash.com/search/photos?page=1&query=${query}&client_id=${api}`,
+    ).then(res =>
+      res.json().then(res => {
+        setImgList(res.results);
+      }),
+    );
+  }, [query]);
+
   return (
     <View>
       <ScrollView style={styles.scrollView}>
         <Text style={styles.heading}>Search</Text>
         <View style={styles.searchbar}>
-          <SearchBar placeholder={placeholder} />
+          <SearchBar
+            setQuery={setQuery}
+            query={query}
+            placeholder={placeholder}
+          />
         </View>
         <Text style={styles.destination}>Top Destinations</Text>
         <Destinations />
         <Text style={styles.attraction}>Nearby Attractions</Text>
-        <Attractions />
+        <Attractions query={query} ImgList={ImgList} />
       </ScrollView>
     </View>
   );
