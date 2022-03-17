@@ -22,12 +22,14 @@ const LIST = [
   },
 ];
 
-const Item = ({title, setQuery, query}) => (
+const Item = ({title, setQuery, query, setImgList, setPage}) => (
   <View style={styles.item}>
     <Text
       style={[title === query ? styles.titleSelected : styles.title]}
       onPress={() => {
         setQuery(title);
+        setPage(1);
+        setImgList([]);
       }}>
       {title}
     </Text>
@@ -65,7 +67,13 @@ const HomeCarousel = () => {
   };
 
   const renderItem = ({item}) => (
-    <Item title={item.name} setQuery={setQuery} query={query} />
+    <Item
+      title={item.name}
+      setQuery={setQuery}
+      query={query}
+      setImgList={setImgList}
+      setPage={setPage}
+    />
   );
 
   const loadingIndicator = () => {
