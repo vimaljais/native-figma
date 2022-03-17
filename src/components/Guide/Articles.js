@@ -1,69 +1,104 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Card, ActivityIndicator} from 'react-native-paper';
+import {api} from '../../utils/api';
 
-import img1 from '../../assets/2.jpeg';
-import img2 from '../../assets/1.jpeg';
+const Images = ({url}) => (
+  <Card style={styles.cardList}>
+    <Card.Cover
+      style={styles.img1}
+      source={{
+        uri: url,
+      }}
+    />
+  </Card>
+);
 
-const DATA = [
-  {
-    id: 1,
-    title: 'EXPERIENCE',
-    text: 'Beautiful Alley Scene in Old Town in Europe at Sunset',
-    img: img1,
-  },
+const Articles = ({selected}) => {
+  const [ImgList, setImgList] = useState([]);
+  const [page, setPage] = useState(1);
 
-  {
-    id: 2,
-    title: 'SHOPPING',
-    text: 'The Ultimate Guide to Shopping for Travel',
-    img: img2,
-  },
-];
+  useEffect(() => {
+    fetch(
+      `https://api.unsplash.com/search/photos?page=${page}&query=${selected}&client_id=${api}`,
+    ).then(res =>
+      res.json().then(res => {
+        setImgList(prev => [...prev, ...res.results]);
+      }),
+    );
+  }, [selected, page]);
 
-const Articles = () => {
-  return (
-    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      <View style={styles.container}>
-        <View style={styles.cardContainer}>
-          <Image style={styles.img} source={DATA[0].img} />
-          <Text style={styles.title}>{DATA[0].title}</Text>
-          <Text style={styles.text}>{DATA[0].text}</Text>
-        </View>
-        <View>
-          <Image style={styles.img} source={DATA[1].img} />
-          <Text style={styles.title}>{DATA[1].title}</Text>
-          <Text style={styles.text}>{DATA[1].text}</Text>
-        </View>
+  const fetchAgain = () => {
+    setPage(prev => prev + 1);
+  };
+
+  useEffect(() => {
+    console.log(selected);
+    setImgList([]);
+    setPage(1);
+    fetchAgain();
+  }, [selected]);
+
+  const loadingIndicator = () => {
+    return (
+      <View style={styles.ActivityIndicator}>
+        <ActivityIndicator animating={true} size={'large'} color={'blue'} />
       </View>
-    </ScrollView>
+    );
+  };
+
+  const renderImages = ({item}) => {
+    return <Images url={item.urls.regular} />;
+  };
+
+  return (
+    <View style={styles.imglist}>
+      <View style={styles.cardContainer}>
+        {ImgList.length > 0 ? (
+          <FlatList
+            horizontal
+            data={ImgList}
+            renderItem={renderImages}
+            keyExtractor={img => img.id}
+            onEndReachedThreshold={0.2}
+            onEndReached={fetchAgain}
+            ListFooterComponent={loadingIndicator}
+          />
+        ) : (
+          <ActivityIndicator animating={true} color={'red'} />
+        )}
+      </View>
+    </View>
   );
 };
 
 export default Articles;
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    marginLeft: 20,
-    marginTop: 20,
-  },
-  cardContainer: {
-    width: 253,
+  title: {
+    fontSize: 15,
     marginRight: 20,
   },
-  img: {
-    height: 161,
-    width: 253,
-    borderRadius: 10,
-  },
-  title: {
-    margin: 10,
+  titleSelected: {
+    fontSize: 15,
+    marginRight: 20,
+    color: 'red',
     fontWeight: '600',
-    color: '#0048F0',
-    marginBottom: 5,
+    textDecorationLine: 'underline',
   },
-  text: {
+  cardContainer: {
+    marginTop: 50,
     marginLeft: 10,
-    fontWeight: '600',
+    flexDirection: 'row',
+    flex: 1,
+  },
+  img1: {borderRadius: 10},
+  imglist: {flex: 1},
+  cardList: {borderRadius: 10, height: 161, width: 253, marginRight: 15},
+  ActivityIndicator: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    flex: 1,
+    marginRight: 20,
   },
 });

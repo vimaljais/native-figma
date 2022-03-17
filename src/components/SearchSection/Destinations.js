@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     flexDirection: 'row',
+    flex: 1,
   },
 
   img: {

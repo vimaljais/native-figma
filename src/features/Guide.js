@@ -1,25 +1,31 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import GuideStories from '../components/Guide/GuideStories';
-import SearchBar from '../components/SearchSection/SearchBar';
+import SearchBarGuide from '../components/Guide/SearchBarGuide';
 import ButtonGroup from '../components/Guide/ButtonGroup';
 import Articles from '../components/Guide/Articles';
 
 const Guide = () => {
+  const [selected, setSelected] = useState('sightseeing');
+
   return (
-    <View>
-      <Text style={styles.heading}>Trip Plan</Text>
+    <View style={styles.guideContainer}>
+      <Text style={styles.heading}>Guide</Text>
       <View style={styles.headerContainer}>
         <Text style={styles.need}>MIGHT NEED THIS</Text>
         <Text style={styles.seeAll}>See all</Text>
       </View>
-      <GuideStories />
-      <View style={styles.search}>
-        <SearchBar placeholder="Search for a place" />
+      <View>
+        <GuideStories />
       </View>
-      <ButtonGroup />
+      <View style={styles.search}>
+        <SearchBarGuide placeholder="Search for a place" />
+      </View>
+      <View>
+        <ButtonGroup setSelected={setSelected} selected={selected} />
+      </View>
       <Text style={styles.top}>Top-pick articles</Text>
-      <Articles />
+      <Articles selected={selected} />
     </View>
   );
 };
@@ -27,6 +33,9 @@ const Guide = () => {
 export default Guide;
 
 const styles = StyleSheet.create({
+  guideContainer: {
+    flex: 1,
+  },
   heading: {
     fontSize: 28,
     fontWeight: '600',

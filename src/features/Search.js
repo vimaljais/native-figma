@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import SearchBar from '../components/SearchSection/SearchBar';
 import Destinations from '../components/SearchSection/Destinations';
@@ -8,34 +8,38 @@ import {api} from '../utils/api';
 const Search = ({placeholder = 'Search'}) => {
   const [query, setQuery] = useState('Maldives');
   const [ImgList, setImgList] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    console.log(query);
     fetch(
-      `https://api.unsplash.com/search/photos?page=1&query=${query}&client_id=${api}`,
+      `https://api.unsplash.com/search/photos?page=${page}&query=${query}&client_id=${api}`,
     ).then(res =>
       res.json().then(res => {
-        setImgList(res.results);
+        setImgList(prev => [...prev, ...res.results]);
       }),
     );
-  }, [query]);
+  }, [query, page]);
+
+  const fetchAgain = () => {
+    setPage(prev => prev + 1);
+  };
 
   return (
-    <View>
-      <ScrollView style={styles.scrollView}>
-        <Text style={styles.heading}>Search</Text>
-        <View style={styles.searchbar}>
-          <SearchBar
-            setQuery={setQuery}
-            query={query}
-            placeholder={placeholder}
-          />
-        </View>
-        <Text style={styles.destination}>Top Destinations</Text>
+    <View style={styles.scrollView}>
+      <Text style={styles.heading}>Search</Text>
+      <View style={styles.searchbar}>
+        <SearchBar
+          setQuery={setQuery}
+          query={query}
+          placeholder={placeholder}
+        />
+      </View>
+      <Text style={styles.destination}>Top Destinations</Text>
+      <View>
         <Destinations />
-        <Text style={styles.attraction}>Nearby Attractions</Text>
-        <Attractions query={query} ImgList={ImgList} />
-      </ScrollView>
+      </View>
+      <Text style={styles.attraction}>Nearby Attractions</Text>
+      <Attractions query={query} ImgList={ImgList} fetchAgain={fetchAgain} />
     </View>
   );
 };
@@ -68,5 +72,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     marginHorizontal: 0,
+    flex: 1,
   },
 });

@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Selector from '../components/TripSection/Selector';
-import Attractions from '../components/SearchSection/Attractions';
+import Attractions from '../components/TripSection/TripAttraction';
 import Covid from '../components/TripSection/Covid';
 
 const Trip = () => {

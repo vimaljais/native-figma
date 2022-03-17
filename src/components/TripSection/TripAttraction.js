@@ -1,12 +1,29 @@
 import {FlatList, ImageBackground, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {Button, Card, IconButton} from 'react-native-paper';
 
-import {Button, Card, IconButton, ActivityIndicator} from 'react-native-paper';
+import img1 from '../../assets/8.jpeg';
+import img2 from '../../assets/7.jpeg';
+
+const LIST = [
+  {
+    id: 1,
+    name: 'Marina Bay',
+    subText: 'Singarpore',
+    img: img1,
+  },
+  {
+    id: 2,
+    name: 'Petronas Twin Towers',
+    subText: 'Singarpore',
+    img: img2,
+  },
+];
 
 const Item = ({name, img, subText}) => (
   <Card style={styles.cardList}>
     <ImageBackground
-      source={{uri: img}}
+      source={img}
       resizeMode="cover"
       imageStyle={styles.img}
       style={styles.imgContainer}>
@@ -35,34 +52,17 @@ const Item = ({name, img, subText}) => (
   </Card>
 );
 
-const Attractions = ({ImgList, query, fetchAgain}) => {
+const Attractions = () => {
   const renderItem = ({item}) => (
-    <Item name={item.user.first_name} subText={query} img={item.urls.regular} />
+    <Item name={item.name} subText={item.subText} img={item.img} />
   );
-
-  const loadingIndicator = () => {
-    return (
-      <View style={styles.ActivityIndicator}>
-        <ActivityIndicator animating={true} size={'large'} color={'blue'} />
-      </View>
-    );
-  };
   return (
     <View style={styles.container}>
-      {ImgList.length > 0 ? (
-        <FlatList
-          data={ImgList}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={loadingIndicator}
-          onEndReached={fetchAgain}
-        />
-      ) : (
-        <View style={styles.ActivityIndicator}>
-          <ActivityIndicator animating={true} size={'large'} color={'blue'} />
-        </View>
-      )}
+      <FlatList
+        data={LIST}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
     </View>
   );
 };
@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
     marginTop: 15,
-    flex: 1,
   },
   title: {
     fontSize: 15,
@@ -126,11 +125,5 @@ const styles = StyleSheet.create({
     flex: 0.8,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  ActivityIndicator: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    flex: 1,
-    marginBottom: 80,
   },
 });

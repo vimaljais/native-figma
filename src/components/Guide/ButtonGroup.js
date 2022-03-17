@@ -1,30 +1,30 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
 import {Button} from 'react-native-paper';
 
-const ButtonGroup = () => {
+const ButtonGroup = ({selected, setSelected}) => {
   return (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       <View style={styles.container}>
         <Button
           icon="camera"
           style={styles.button}
-          mode="outlined"
-          onPress={() => console.log('Pressed')}>
+          mode={selected === 'sightseeing' ? 'contained' : 'outlined'}
+          onPress={() => setSelected('sightseeing')}>
           Sightseeing
         </Button>
         <Button
           style={styles.button}
           icon="glass-wine"
-          mode="outlined"
-          onPress={() => console.log('Pressed')}>
+          mode={selected === 'resort' ? 'contained' : 'outlined'}
+          onPress={() => setSelected('resort')}>
           Resort
         </Button>
         <Button
           icon="food"
           style={styles.button}
-          mode="outlined"
-          onPress={() => console.log('Pressed')}>
+          mode={selected === 'restraunt' ? 'contained' : 'outlined'}
+          onPress={() => setSelected('restraunt')}>
           Restraunt
         </Button>
       </View>

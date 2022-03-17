@@ -1,6 +1,6 @@
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Card} from 'react-native-paper';
+import {Card, ActivityIndicator} from 'react-native-paper';
 import {api} from '../../utils/api';
 
 const LIST = [
@@ -22,10 +22,10 @@ const LIST = [
   },
 ];
 
-const Item = ({title, setQuery, Query}) => (
+const Item = ({title, setQuery, query}) => (
   <View style={styles.item}>
     <Text
-      style={[title === Query ? styles.titleSelected : styles.title]}
+      style={[title === query ? styles.titleSelected : styles.title]}
       onPress={() => {
         setQuery(title);
       }}>
@@ -34,7 +34,7 @@ const Item = ({title, setQuery, Query}) => (
   </View>
 );
 
-const Images = ({url, ImgList}) => (
+const Images = ({url}) => (
   <Card style={styles.cardList}>
     <Card.Cover
       style={styles.img1}
@@ -46,22 +46,36 @@ const Images = ({url, ImgList}) => (
 );
 
 const HomeCarousel = () => {
-  const [Query, setQuery] = useState('Flights');
+  const [query, setQuery] = useState('Flights');
   const [ImgList, setImgList] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetch(
-      `https://api.unsplash.com/search/photos?page=1&query=${Query}&client_id=${api}`,
+      `https://api.unsplash.com/search/photos?page=${page}&query=${query}&client_id=${api}`,
     ).then(res =>
       res.json().then(res => {
-        setImgList(res.results);
+        setImgList(prev => [...prev, ...res.results]);
       }),
     );
-  }, [Query]);
+  }, [query, page]);
+
+  const fetchAgain = () => {
+    setPage(prev => prev + 1);
+  };
 
   const renderItem = ({item}) => (
-    <Item title={item.name} setQuery={setQuery} Query={Query} />
+    <Item title={item.name} setQuery={setQuery} query={query} />
   );
+
+  const loadingIndicator = () => {
+    return (
+      <View style={styles.ActivityIndicator}>
+        <ActivityIndicator animating={true} size={'large'} color={'blue'} />
+      </View>
+    );
+  };
+
   const renderImages = ({item}) => {
     return <Images url={item.urls.regular} ImgList={ImgList} />;
   };
@@ -76,7 +90,7 @@ const HomeCarousel = () => {
           keyExtractor={item => item.id}
         />
       </View>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <View style={styles.imglist}>
         <View style={styles.cardContainer}>
           {ImgList.length > 0 ? (
             <FlatList
@@ -84,12 +98,15 @@ const HomeCarousel = () => {
               data={ImgList}
               renderItem={renderImages}
               keyExtractor={img => img.id}
+              onEndReachedThreshold={0.2}
+              onEndReached={fetchAgain}
+              ListFooterComponent={loadingIndicator}
             />
           ) : (
-            <Text>dasds</Text>
+            <ActivityIndicator animating={true} color={'red'} />
           )}
         </View>
-      </ScrollView>
+      </View>
     </>
   );
 };
@@ -117,7 +134,15 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginLeft: 10,
     flexDirection: 'row',
+    flex: 1,
   },
   img1: {borderRadius: 10},
+  imglist: {flex: 1},
   cardList: {borderRadius: 10, height: 168, width: 280, marginRight: 15},
+  ActivityIndicator: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    flex: 1,
+    marginRight: 20,
+  },
 });
