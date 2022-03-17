@@ -2,12 +2,16 @@ import React, {useState, useCallback} from 'react';
 import {Searchbar} from 'react-native-paper';
 import {debounce} from 'lodash';
 
-const SearchBar = ({placeholder, setQuery, query}) => {
+const SearchBar = ({placeholder, setQuery, query, setImgList, setPage}) => {
   const [localQuery, setLocalQuery] = useState('Maldives');
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSave = useCallback(
-    debounce(q => setQuery(q), 1000),
+    debounce(q => {
+      setImgList([]);
+      setPage([]);
+      setQuery(q);
+    }, 1000),
     [query],
   );
 

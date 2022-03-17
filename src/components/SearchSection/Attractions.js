@@ -60,6 +60,7 @@ const Attractions = ({ImgList, query, fetchAgain}) => {
         />
       ) : (
         <View style={styles.ActivityIndicator}>
+          <Text>Start typing</Text>
           <ActivityIndicator animating={true} size={'large'} color={'blue'} />
         </View>
       )}

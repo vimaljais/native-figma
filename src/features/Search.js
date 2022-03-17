@@ -11,6 +11,7 @@ const Search = ({placeholder = 'Search'}) => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
+    console.log(query);
     fetch(
       `https://api.unsplash.com/search/photos?page=${page}&query=${query}&client_id=${api}`,
     ).then(res =>
@@ -18,7 +19,7 @@ const Search = ({placeholder = 'Search'}) => {
         setImgList(prev => [...prev, ...res.results]);
       }),
     );
-  }, [query, page]);
+  }, [query]);
 
   const fetchAgain = () => {
     setPage(prev => prev + 1);
@@ -30,6 +31,8 @@ const Search = ({placeholder = 'Search'}) => {
       <View style={styles.searchbar}>
         <SearchBar
           setQuery={setQuery}
+          setImgList={setImgList}
+          setPage={setPage}
           query={query}
           placeholder={placeholder}
         />
